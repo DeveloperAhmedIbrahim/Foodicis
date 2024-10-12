@@ -233,10 +233,10 @@
                 <div class="col-xl-6">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">Line Chart With Data Labels</div>
+                            <div class="card-title">Total Sales of <?php echo e(date('Y')); ?></div>
                         </div>
                         <div class="card-body">
-                            <div id="line-chart-datalabels"></div>
+                            <canvas id="total-sales"></canvas>
                         </div>
                     </div>
                 </div>
@@ -244,10 +244,10 @@
                 <div class="col-xl-6">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">Line Chart With Data Labels</div>
+                            <div class="card-title">Total Purchases of <?php echo e(date('Y')); ?></div>
                         </div>
                         <div class="card-body">
-                            <div id="line-chart-datalabels"></div>
+                            <canvas id="total-purchases"></canvas>
                         </div>
                     </div>
                 </div>
@@ -261,6 +261,37 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const salesCanvas = document.getElementById('total-sales');
+            const salesChart = new Chart(salesCanvas, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [],
+                        fill: true,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+            });
+
+            const purchasesCanvas = document.getElementById('total-purchases');
+            const purchasesChart = new Chart(purchasesCanvas, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Purchases',
+                        data: [],
+                        fill: true,
+                        borderColor: '#FF007F',
+                        tension: 0.1
+                    }]
+                },
+            });
+        </script>
 
 
     </div>

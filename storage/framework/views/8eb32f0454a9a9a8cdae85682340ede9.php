@@ -113,7 +113,7 @@
 <script src="<?php echo e(asset('assets/libs/jsvectormap/maps/world-merc.js')); ?>"></script>
 
 <!-- Apex Charts JS -->
-<script src="<?php echo e(asset('assets/libs/apexcharts/apexcharts.min.js')); ?>"></script>
+
 
 <!-- Chartjs Chart JS -->
 <script src="<?php echo e(asset('assets/libs/chart.js/chart.min.js')); ?>"></script>
@@ -130,7 +130,7 @@
     <script src="<?php echo e(asset('assets/js/custom-switcher.min.js')); ?>"></script>
 
     <!-- Apex Charts JS -->
-    <script src="<?php echo e(asset('assets/libs/apexcharts/apexcharts.min.js')); ?>"></script>
+    
 
     <!-- Used In Zoomable TIme Series Chart -->
     <script src="<?php echo e(asset('assets/js/dataseries.js')); ?>"></script>
@@ -141,7 +141,34 @@
     <!-- Internal Apex Line Charts JS -->
     <script src="<?php echo e(asset('assets/js/apexcharts-line.js')); ?>"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+    <script>
+      jQuery.ajax({
+          url: "<?php echo e(route('manager.sales.stats')); ?>",
+          method: "POST",
+          data: {
+            _token: '<?php echo e(csrf_token()); ?>'
+          },
+          success:function(response)
+          {
+            salesChart.data.datasets[0].data = response;
+            salesChart.update();
+          }
+      });
+      jQuery.ajax({
+          url: "<?php echo e(route('manager.purchases.stats')); ?>",
+          method: "POST",
+          data: {
+            _token: '<?php echo e(csrf_token()); ?>'
+          },
+          success:function(response)
+          {
+            purchasesChart.data.datasets[0].data = response;
+            purchasesChart.update();
+          }
+      });
+    </script>
 
 </body>
 
