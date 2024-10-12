@@ -139,7 +139,7 @@ public function cancelled_order()
             'tax' => $cart['tax'],
             'total' => $cart['total'],
             'order_code' => $order_code,
-            'type_of_order' => $cart['type_of_order'], // Replace chef_id with type_of_order
+            'order_type' => $cart['order_type']
         ]);
     
         // Save the items in the order

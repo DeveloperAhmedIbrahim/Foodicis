@@ -11,6 +11,7 @@ use App\Http\Controllers\Manager\PosController;
 use App\Http\Controllers\Manager\OrderController;
 use App\Http\Controllers\Manager\ProfileController;
 use App\Http\Controllers\Manager\PurchaseIngredidientController;
+use App\Http\Controllers\Manager\StatsController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,9 @@ Route::get('/orders/{order}/items', [OrderController::class, 'getOrderItems']);
 Route::post('/orders/{orderId}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
 Route::middleware(['auth:manager'])->prefix('manager')->name('manager.')->group(function () {
+
+    Route::post('/sales-states', [StatsController::class, "sales"])->name('sales.stats');
+    Route::post('/purchases-states', [StatsController::class, "purchases"])->name('purchases.stats');
 
     Route::get('/dashboard', function () {
         return view('manager_panel.admin_dashboard.dashboard');

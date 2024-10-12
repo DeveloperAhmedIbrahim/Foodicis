@@ -127,12 +127,12 @@
                                 </div>
                             </div>
                             <div class="d-grid btn-block">
-                                <label for="chef-select">Assign Chef:</label>
-                                <select id="chef-select" class="form-select">
-                                    <option value="">Select a Chef</option>
-                                    @foreach ($chefs as $chef)
-                                        <option value="{{ $chef->id }}">{{ $chef->name }}</option>
-                                    @endforeach
+                                <label for="chef-select">Order Type</label>
+                                <select id="order-type" class="form-select">
+                                    <option value="">Select Order Type</option>
+                                    <option value="Dine in">Dine in</option>
+                                    <option value="Take away">Take away</option>
+                                    <option value="Delivery">Delivery</option>
                                 </select>
  
                             </div>
@@ -171,7 +171,7 @@
     </div>
     
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
  <script>
     $('#place-order').on('click', function() {
@@ -181,7 +181,8 @@
             items: cart,
             subtotal: parseFloat($('#subtotal').text().replace('AED', '').trim()),
             tax: parseFloat($('#tax').text().replace('AED', '').trim()),
-            total: parseFloat($('#grand-total').text().replace('AED', '').trim())
+            total: parseFloat($('#grand-total').text().replace('AED', '').trim()),
+            order_type: $('#order-type').val()
         };
 
         $.ajax({
@@ -200,61 +201,60 @@
         });
     });
 
+    // Event listener for clicking on a category
+    $(document).on('click', '.pos-categories ul li', function() {
+        var categoryId = $(this).attr('id').replace('cat', '');
+        console.log('Category ID:', categoryId); // Debugging
+        $.ajax({
+            url: '/get-subcategories/' + categoryId,
+            type: 'GET',
+            success: function(response) {
+                console.log('Response received:', response); // Debugging
+                $('.tabs_container2').empty();
+
+                $.each(response, function(index, subcategory) {
+                    console.log(subcategory.dishes); // Debugging
+
+                    var subcategoryHTML = '';
+
+                    $.each(subcategory.dishes, function(dIndex, dish) {
+                        subcategoryHTML += `
+                            <div class="col-sm-2 col-md-4 col-lg-4 col-xl-4 pe-2 product-card" data-tab="subcategory${subcategory.id}" 
+                                data-id="${dish.id}" data-image="${dish.image}" data-name="${dish.name}" data-price="${dish.price}">
+                                <div class="product-info default-cover card">
+                                    <a href="javascript:void(0);" class="img-bg">
+                                        <img width="150px" height="150px" src="/dish_images/${dish.image}" alt="Products">
+                                        <span><i data-feather="check" class="feather-16"></i></span>
+                                    </a>
+                                    <h6 class="cat-name"><a href="javascript:void(0);">${dish.name}</a></h6>
+                                    <div class="d-flex align-items-center justify-content-between price">
+                                        <p>Price: ${dish.price || 'N/A'} AED</p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between price">
+                                        <button class="add-to-cart-btn btn btn-primary btn-sm" data-id="${dish.id}" data-name="${dish.name}" data-price="${dish.price}">Cart</button>
+                                        <button class="view-extras-btn btn btn-info btn-sm" data-id="${dish.id}" data-name="${dish.name}" data-extras='${JSON.stringify(dish.extra_ingredients)}'>Add Extras</button>
+                                    </div>
+                                </div>
+                            </div>`;
+                    });
+
+                    $('.tabs_container2').append(subcategoryHTML);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.log("Error: " + error);
+            }
+        });
+    });
+    
     $(document).ready(function() {
         // Initialize Owl Carousel
-        $('.owl-carousel').owlCarousel({
-            loop: true,
-            margin: 10,
-            nav: true,
-            items: 3
-        });
-
-        // Event listener for clicking on a category
-        $(document).on('click', '.pos-category li', function() {
-            var categoryId = $(this).attr('id').replace('cat', '');
-            console.log('Category ID:', categoryId); // Debugging
-
-            $.ajax({
-                url: '/get-subcategories/' + categoryId,
-                type: 'GET',
-                success: function(response) {
-                    console.log('Response received:', response); // Debugging
-                    $('.tabs_container2').empty();
-
-                    $.each(response, function(index, subcategory) {
-                        console.log(subcategory.dishes); // Debugging
-
-                        var subcategoryHTML = '';
-
-                        $.each(subcategory.dishes, function(dIndex, dish) {
-                            subcategoryHTML += `
-                                <div class="col-sm-2 col-md-4 col-lg-4 col-xl-4 pe-2 product-card" data-tab="subcategory${subcategory.id}" 
-                                    data-id="${dish.id}" data-image="${dish.image}" data-name="${dish.name}" data-price="${dish.price}">
-                                    <div class="product-info default-cover card">
-                                        <a href="javascript:void(0);" class="img-bg">
-                                            <img width="150px" height="150px" src="/dish_images/${dish.image}" alt="Products">
-                                            <span><i data-feather="check" class="feather-16"></i></span>
-                                        </a>
-                                        <h6 class="cat-name"><a href="javascript:void(0);">${dish.name}</a></h6>
-                                        <div class="d-flex align-items-center justify-content-between price">
-                                            <p>Price: ${dish.price || 'N/A'} AED</p>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between price">
-                                            <button class="add-to-cart-btn btn btn-primary btn-sm" data-id="${dish.id}" data-name="${dish.name}" data-price="${dish.price}">Cart</button>
-                                            <button class="view-extras-btn btn btn-info btn-sm" data-id="${dish.id}" data-name="${dish.name}" data-extras='${JSON.stringify(dish.extra_ingredients)}'>Add Extras</button>
-                                        </div>
-                                    </div>
-                                </div>`;
-                        });
-
-                        $('.tabs_container2').append(subcategoryHTML);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.log("Error: " + error);
-                }
-            });
-        });
+        // $('.owl-carousel').owlCarousel({
+        //     loop: true,
+        //     margin: 10,
+        //     nav: true,
+        //     items: 3
+        // });
 
         // Event listener for viewing extras
         $(document).on('click', '.view-extras-btn', function() {
@@ -479,10 +479,10 @@
 
 </script>
 
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    </script>
+    </script> --}}
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
     </script>

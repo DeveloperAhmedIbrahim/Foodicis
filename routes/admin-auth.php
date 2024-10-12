@@ -32,6 +32,8 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('profile-setting',[ProfileController::class,'index'])->name('profile-setting');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['verified'])->name('dashboard');
+    Route::post('/restaurants-states', [DashboardController::class, "restaurants"])->name('restaurants.stats');
+    Route::post('/leads-states', [DashboardController::class, "leads"])->name('leads.stats');
 
     Route::get('/restaurant-details{id}', [DetailsController::class, 'restaurant_details'])->name('restaurant_details');
 

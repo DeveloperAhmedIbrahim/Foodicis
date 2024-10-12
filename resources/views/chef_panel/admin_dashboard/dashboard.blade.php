@@ -169,27 +169,26 @@
                 <div class="col-xl-6">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">Basic Line Chart</div>
+                            <div class="card-title">Total Orders in {{ date('Y') }}</div>
                         </div>
                         <div class="card-body">
-                            <div id="line-chart"></div>
+                            <canvas id="total-orders"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-6">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">Line Chart With Data Labels</div>
+                            <div class="card-title">Total Waste Units in {{ date('Y') }}</div>
                         </div>
                         <div class="card-body">
-                            <div id="line-chart-datalabels"></div>
+                            <canvas id="total-wastes"></canvas>
                         </div>
                     </div>
                 </div>
    
             </div>
              
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Make sure to include Chart.js -->
 {{-- 
                 <script>
                     async function fetchChartData() {
@@ -244,7 +243,37 @@
         </div>
         <!-- End::row-1 -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ordersCanvas = document.getElementById('total-orders');
+            const ordersChart = new Chart(ordersCanvas, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Orders',
+                        data: [],
+                        fill: true,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+            });
 
+            const wastesCanvas = document.getElementById('total-wastes');
+            const wastesChart = new Chart(wastesCanvas, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Wastes',
+                        data: [],
+                        fill: true,
+                        borderColor: '#FF007F',
+                        tension: 0.1
+                    }]
+                },
+            });
+        </script>
 
     </div>
 </div>

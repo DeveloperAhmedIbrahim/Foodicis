@@ -7,6 +7,7 @@ use App\Http\Controllers\Chef\DishController;
 use App\Http\Controllers\Chef\PrepareDishController;
 use App\Http\Controllers\Chef\ProfileController;
 use App\Http\Controllers\Chef\SubcategoryController;
+use App\Http\Controllers\Chef\StatsController;
 use Illuminate\Events\Dispatcher;
 use App\Http\Controllers\Chef\ChefOrderController;
 use App\Http\Controllers\Chef\OrderController;
@@ -37,6 +38,8 @@ Route::middleware(['auth:chef'])->prefix('chef')->name('chef.')->group(function 
     // })->middleware(['verified'])->name('dashboard');
     Route::get('/dashboard', [AuthenticatedSessionController::class, 'index'])->name('dashboard');
 
+    Route::post('/orders-states', [StatsController::class, "orders"])->name('orders.stats');
+    Route::post('/wastes-states', [StatsController::class, "wastes"])->name('wastes.stats');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

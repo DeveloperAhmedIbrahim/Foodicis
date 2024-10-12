@@ -19,6 +19,34 @@ class DashboardController extends Controller
         return view('admin_panel.admin_dashboard.dashboard', compact('manager', 'leads', 'today_leads', 'manger_request'));
     }
 
+    public function restaurants()
+    {
+        $restaurants = [];
+        for($i = 1; $i <= 12; $i++)
+        {
+            $month = $i > 9 ? $i : '0'.$i;
+            $match = date('Y')."-{$month}";
+            $restaurants[] = Manager::where([
+                ['created_at', 'LIKE', "%{$match}%"]
+            ])->count();
+        }
+        return response()->json($restaurants);
+    }
+
+    public function leads()
+    {
+        $leads = [];
+        for($i = 1; $i <= 12; $i++)
+        {
+            $month = $i > 9 ? $i : '0'.$i;
+            $match = date('Y')."-{$month}";
+            $leads[] = Contact::where([
+                ['created_at', 'LIKE', "%{$match}%"]
+            ])->count();
+        }
+        return response()->json($leads);
+    }
+
     public function printTotalLeadsData()
     {
         $totalLeads = Contact::count();

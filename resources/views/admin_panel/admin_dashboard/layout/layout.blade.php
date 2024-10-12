@@ -141,6 +141,35 @@
     <!-- Internal Apex Line Charts JS -->
     <script src="{{ asset('assets/js/apexcharts-line.js') }}"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+      jQuery.ajax({
+          url: "{{ route('admin.restaurants.stats') }}",
+          method: "POST",
+          data: {
+            _token: '{{ csrf_token() }}'
+          },
+          success:function(response)
+          {
+            restaurantsChart.data.datasets[0].data = response;
+            restaurantsChart.update();
+          }
+      });
+      jQuery.ajax({
+          url: "{{ route('admin.leads.stats') }}",
+          method: "POST",
+          data: {
+            _token: '{{ csrf_token() }}'
+          },
+          success:function(response)
+          {
+            leadsChart.data.datasets[0].data = response;
+            leadsChart.update();
+          }
+      });
+    </script>
+
 
 
 </body>

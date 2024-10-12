@@ -438,10 +438,10 @@
                     <div class="col-xl-6">
                         <div class="card custom-card">
                             <div class="card-header">
-                                <div class="card-title">Basic Line Chart</div>
+                                <div class="card-title">Total Restaurants in {{ date('Y') }}</div>
                             </div>
                             <div class="card-body">
-                                <canvas id="line-chart"></canvas>
+                                <canvas id="total-restaurants"></canvas>
                             </div>
                         </div>
                     </div>
@@ -450,10 +450,10 @@
                     <div class="col-xl-6">
                         <div class="card custom-card">
                             <div class="card-header">
-                                <div class="card-title">Basic Line Chart</div>
+                                <div class="card-title">Total Leads in {{ date('Y') }}</div>
                             </div>
                             <div class="card-body">
-                                <canvas id="line-chart"></canvas>
+                                <canvas id="total-leads"></canvas>
                             </div>
                         </div>
                     </div>
@@ -461,6 +461,36 @@
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Make sure to include Chart.js -->
 
                     <script>
+                        const restaurantsCanvas = document.getElementById('total-restaurants');
+                        const restaurantsChart = new Chart(restaurantsCanvas, {
+                            type: 'line',
+                            data: {
+                                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                                datasets: [{
+                                    label: 'Restaurants',
+                                    data: [],
+                                    fill: true,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                }]
+                            },
+                        });
+
+                        const leadsCanvas = document.getElementById('total-leads');
+                        const leadsChart = new Chart(leadsCanvas, {
+                            type: 'line',
+                            data: {
+                                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                                datasets: [{
+                                    label: 'Leads',
+                                    data: [],
+                                    fill: true,
+                                    borderColor: '#FF007F',
+                                    tension: 0.1
+                                }]
+                            },
+                        });
+
                         async function fetchChartData() {
                             try {
                                 const response = await fetch('/admin/get-weekly-leads-data'); // Adjust the API endpoint as needed
